@@ -17,7 +17,7 @@ interface ProblemResponse {
   problem: Problem;
 }
 
-type DifficultyColor = 'text-green-500' | 'text-yellow-500' | 'text-red-500' | 'text-gray-500';
+
 
 const ProblemDescription: React.FC = () => {
   const { id } = useParams<{ id: string }>();

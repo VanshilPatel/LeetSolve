@@ -39,6 +39,7 @@ const Login: React.FC = () => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string>>) => {
     setter(e.target.value);
+    setPassword("abc");
   };
 
   return (

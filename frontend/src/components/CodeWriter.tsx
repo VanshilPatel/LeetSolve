@@ -37,7 +37,7 @@ const getStarterCode = (language : string) : string => {
   }
 };
 
-export const CodeWriter: React.FC<CodeWriterProps>= ({onSubmit}) => {
+export const CodeWriter: React.FC<CodeWriterProps>= () => {
   const [language, setLanguage] = useState<string>(languageOptions[0].value);
   const [languageId, setLanguageId] = useState<number>(languageOptions[0].id);
   const [editorValue, setEditorValue] = useState<string>(getStarterCode(languageOptions[0].value));

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import  CodeWriter  from './CodeWriter';
-import TestCase from './TestCase';
+import TestCase from './Testcase';
 
 interface TestCase {
   id: number;
@@ -12,7 +12,7 @@ interface TestResult {
   error?: string;
   output?: string;
   status?: string;
-  // Add other result properties based on your API response
+
 }
 
 interface TestResults {
@@ -30,12 +30,8 @@ interface RightContainerProps {
 }
 
 const RightContainer: React.FC<RightContainerProps> = ({ 
-  testCases, 
-  testResults, 
+
   status, 
-  onAddTestCase, 
-  onRemoveTestCase, 
-  onTestCaseChange, 
   onSubmit 
 }) => {
   return (

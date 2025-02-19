@@ -31,7 +31,7 @@ const ProblemSolver: React.FC = () => {
   const [testCases, setTestCases] = useState<TestCase[]>([{ id: 1, value: "1 2 3" }]);
   const [testResults, setTestResults] = useState<TestResults>({});
   const [status, setStatus] = useState<string>("");
-  const [isRunning, setIsRunning] = useState<boolean>(false);
+ 
 
   const handleAddTestCase = (): void => {
     const newId = Math.max(...testCases.map(tc => tc.id), 0) + 1;
@@ -60,7 +60,7 @@ const ProblemSolver: React.FC = () => {
   };
 
   const handleSubmit = async (code: string, languageId: number): Promise<void> => {
-    setIsRunning(true);
+  
     setStatus("Running test cases...");
     setTestResults({});
 
@@ -97,9 +97,7 @@ const ProblemSolver: React.FC = () => {
       setStatus("All test cases completed");
     } catch (error) {
       setStatus(`Error: ${error instanceof Error ? error.message : 'An unknown error occurred'}`);
-    } finally {
-      setIsRunning(false);
-    }
+    } 
   };
 
   return (
@@ -115,6 +113,7 @@ const ProblemSolver: React.FC = () => {
         onSubmit={handleSubmit}
       />
     </div>
+
   );
 };
 
