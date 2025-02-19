@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import LeftContainer from './LeftContainer';
-import RightContainer from './RightContainer';
+import RightContainer from './RightContainer.jsx';
 
 const ProblemSolver = () => {
   const [testCases, setTestCases] = useState([{ id: 1, value: "1 2 3" }]);
