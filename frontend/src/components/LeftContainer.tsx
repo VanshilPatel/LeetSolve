@@ -1,7 +1,8 @@
-import React from 'react';
+import * as React from "react";
+
 import ProblemDescription from './ProblemDescription';
 
-const LeftContainer = () => {
+const LeftContainer:React.FC = () => {
   return (
     <div className="w-1/2 p-4 border-r overflow-y-auto">
       <ProblemDescription />

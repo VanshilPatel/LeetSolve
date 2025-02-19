@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as React from "react";
 
-const SignUp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+const SignUp: React.FC = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleSignUp = async (e) => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/signup`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,21 +31,15 @@ const SignUp = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-6">
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900">
-            Sign up
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            to get started ✌️
-          </p>
+          <h2 className="text-3xl font-extrabold text-gray-900">Sign up</h2>
+          <p className="mt-2 text-sm text-gray-600">to get started ✌️</p>
         </div>
         
         <form className="mt-8 space-y-6" onSubmit={handleSignUp}>
           <div className="rounded-md shadow-sm space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                  First Name
-                </label>
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
                 <input
                   id="firstName"
                   name="firstName"
@@ -53,9 +49,7 @@ const SignUp = () => {
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                  Last Name
-                </label>
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
                 <input
                   id="lastName"
                   name="lastName"
@@ -66,9 +60,7 @@ const SignUp = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
               <input
                 id="email"
                 name="email"
@@ -80,9 +72,7 @@ const SignUp = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
               <div className="mt-1 relative">
                 <input
                   id="password"

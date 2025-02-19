@@ -1,11 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { CheckCircle, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import * as React from "react";
 
-const QuestionsTable = ({ data }) => {
-  const [problems, setProblems] = useState([]);
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
-  const [isPerPageOpen, setIsPerPageOpen] = useState(false);
+
+interface Problem {
+  id: number;
+  title: string;
+  acceptance: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  status?: 'Solved' | 'Unsolved';
+}
+
+interface QuestionsTableProps {
+  data: Problem[];
+}
+
+const QuestionsTable: React.FC<QuestionsTableProps> = ({ data }) => {
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [perPage, setPerPage] = useState<number>(10);
+  const [isPerPageOpen, setIsPerPageOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setProblems(data || []);
@@ -16,7 +30,7 @@ const QuestionsTable = ({ data }) => {
   const endIndex = startIndex + perPage;
   const currentProblems = problems.slice(startIndex, endIndex);
 
-  const getDifficultyColor = (difficulty) => {
+  const getDifficultyColor = (difficulty: 'Easy' | 'Medium' | 'Hard'): string => {
     switch (difficulty) {
       case 'Easy':
         return 'text-green-500';
@@ -28,8 +42,6 @@ const QuestionsTable = ({ data }) => {
         return 'text-gray-500';
     }
   };
-
-  const solvedCount = problems.filter(p => p.status === 'Solved').length;
 
   return (
     <div className="flex justify-between p-6 gap-6">
@@ -83,7 +95,6 @@ const QuestionsTable = ({ data }) => {
           </table>
         </div>
 
-       
         <div className="flex items-center justify-between mt-4">
           <div className="relative">
             <button
@@ -148,10 +159,6 @@ const QuestionsTable = ({ data }) => {
           </div>
         </div>
       </div>
-
-      
-     
-       
     </div>
   );
 };

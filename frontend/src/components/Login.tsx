@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import * as React from "react";
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+// Interface for the API response
+interface LoginResponse {
+  msg?: string;
+  error?: string;
+}
+
+const Login: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
-      const data = await response.json();
+      const data: LoginResponse = await response.json();
       
       if (data.msg) {
         navigate('/home');
@@ -28,6 +35,10 @@ const Login = () => {
       console.error('Login error:', error);
       toast.error('Login failed. Please try again.');
     }
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string>>) => {
+    setter(e.target.value);
   };
 
   return (
@@ -50,7 +61,7 @@ const Login = () => {
                 name="email"
                 type="email"
                 required
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => handleInputChange(e, setEmail)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
@@ -64,7 +75,7 @@ const Login = () => {
                 name="password"
                 type="password"
                 required
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => handleInputChange(e, setEmail)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>

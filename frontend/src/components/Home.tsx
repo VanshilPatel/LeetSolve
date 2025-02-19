@@ -1,32 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import QuestionFilters from './QuestionFilter';
 import TableDiv from './TableDiv';
+import * as React from "react";
 
-const Home = () => {
-  const [problems, setProblems] = useState([]);
-  const [filteredProblems, setFilteredProblems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [filters, setFilters] = useState({
+
+
+
+interface Problem {
+  id: number;
+  title: string;
+  acceptance: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  status?: 'Solved' | 'Unsolved';
+}
+
+interface Filters {
+  difficulty: string;
+  status: string;
+  search: string;
+}
+
+const Home: React.FC = () => {
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [filteredProblems, setFilteredProblems] = useState<Problem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<Filters>({
     difficulty: '',
     status: '',
     search: ''
   });
 
-  // Fetch problems only once when component mounts
   useEffect(() => {
-    const fetchProblems = async () => {
+    const fetchProblems = async (): Promise<void> => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:3000/problems`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/problems`);
         if (!response.ok) {
           throw new Error('Failed to fetch problems');
         }
-        const data = await response.json();
+        const data: { problems: Problem[] } = await response.json();
         setProblems(data.problems);
         setFilteredProblems(data.problems);
       } catch (err) {
-        setError(err.message);
+        setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setLoading(false);
       }
@@ -35,14 +52,13 @@ const Home = () => {
     fetchProblems();
   }, []);
 
-  // Apply filters whenever filters state changes
   useEffect(() => {
-    const applyFilters = () => {
-      const filtered = problems.filter(problem => {
+    const applyFilters = (): void => {
+      const filtered = problems.filter((problem: Problem) => {
         const matchesDifficulty = !filters.difficulty || 
           problem.difficulty.toLowerCase() === filters.difficulty.toLowerCase();
         const matchesStatus = !filters.status || 
-          problem.status.toLowerCase() === filters.status.toLowerCase();
+          problem.status?.toLowerCase() === filters.status.toLowerCase();
         const matchesSearch = !filters.search || 
           problem.title.toLowerCase().includes(filters.search.toLowerCase());
         

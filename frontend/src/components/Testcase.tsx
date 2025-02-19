@@ -1,7 +1,21 @@
-import React from 'react';
-import { X } from 'lucide-react';
+import * as React from "react";
 
-const TestCase = ({ testCase, onChange, onRemove, isRemovable, result }) => {
+import { X } from "lucide-react";
+
+interface TestCaseProps {
+  testCase: string;
+  onChange: (value: string) => void;
+  onRemove: () => void;
+  isRemovable: boolean;
+  result?: {
+    stdout?: string;
+    stderr?: string;
+    compile_output?: string;
+    error?: string;
+  };
+}
+
+const TestCase: React.FC<TestCaseProps> = ({ testCase, onChange, onRemove, isRemovable, result }) => {
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
@@ -21,16 +35,12 @@ const TestCase = ({ testCase, onChange, onRemove, isRemovable, result }) => {
           </button>
         )}
       </div>
-      
+
       {result && (
         <div className="ml-4">
           <div className="text-sm font-medium">Result:</div>
           <pre className="bg-gray-100 p-2 rounded text-sm">
-            {result.stdout || 
-             result.stderr || 
-             result.compile_output || 
-             result.error || 
-             "No output"}
+            {result.stdout || result.stderr || result.compile_output || result.error || "No output"}
           </pre>
         </div>
       )}

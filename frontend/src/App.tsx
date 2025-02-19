@@ -5,25 +5,20 @@ import Navbar from './components/Navbar';
 import ProblemSolver from './components/ProblemSolver';
 import SignUp from './components/Signup';
 
-
-function App() {
- 
-
+const App: React.FC = () => {
   return (
     <>
-   
-     <Router>
-        <Navbar/>
+      <Router>
+        <Navbar />
         <Routes>
           <Route path="/problem/:id" element={<ProblemSolver />} />
-          <Route path="/" element={<Home/>} />
-          <Route path="/signup" element={<SignUp/>} />
-          <Route path="/login" element={<Login/>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
-    </Router>
-   
+      </Router>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

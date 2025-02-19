@@ -1,8 +1,20 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Editor from '@monaco-editor/react';
 import axios from 'axios';
+import * as React from "react";
 
-const languageOptions = [
+
+interface LanguageOption {
+  value: string;
+  label: string;
+  id: number;
+}
+
+interface CodeWriterProps {
+  onSubmit: (code: string, languageId: number) => Promise<void>;
+}
+
+const languageOptions:LanguageOption[] = [
   { value: 'cpp', label: 'C++', id: 52 },
   { value: 'javascript', label: 'JavaScript', id: 63 },
   { value: 'java', label: 'Java', id: 62 },
@@ -10,7 +22,7 @@ const languageOptions = [
 ];
 
 
-const getStarterCode = (language) => {
+const getStarterCode = (language : string) : string => {
   switch (language) {
     case 'python':
       return `# Read space-separated integers from input\nnums = list(map(int, input().split()))\n\n# Calculate sum\ntotal = sum(nums)\n\n# Print result\nprint(total)`;
@@ -25,41 +37,45 @@ const getStarterCode = (language) => {
   }
 };
 
-export const CodeWriter = () => {
-  const [language, setLanguage] = useState(languageOptions[0].value);
-  const [languageId, setLanguageId] = useState(languageOptions[0].id);
-  const [editorValue, setEditorValue] = useState(getStarterCode(languageOptions[0].value));
-  const [testCase, setTestCase] = useState("1 2 3");
-  const [status, setStatus] = useState("");
-  const [output, setOutput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+export const CodeWriter: React.FC<CodeWriterProps>= ({onSubmit}) => {
+  const [language, setLanguage] = useState<string>(languageOptions[0].value);
+  const [languageId, setLanguageId] = useState<number>(languageOptions[0].id);
+  const [editorValue, setEditorValue] = useState<string>(getStarterCode(languageOptions[0].value));
+  const [testCase, setTestCase] = useState<string>("1 2 3");
+  const [status, setStatus] = useState<string>("");
+  const [output, setOutput] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleLanguageChange = (e) => {
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     const selectedLanguage = languageOptions.find(option => option.value === selectedValue);
     setLanguage(selectedValue);
-    setLanguageId(selectedLanguage.id);
+    setLanguageId(selectedLanguage?.id ?? languageOptions[0].id);
     setEditorValue(getStarterCode(selectedValue));
   };
 
-  const handleEditorChange = (value) => {
+  const handleEditorChange = (value?: string) => {
     setEditorValue(value || "");
   };
 
-  const handleTestCaseChange = (e) => {
+  const handleTestCaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTestCase(e.target.value);
   };
 
-  const getSubmissionResult = async (token) => {
+  const getSubmissionResult = async (token: string) => {
     try {
-      const response = await axios.get(`http://localhost:3000/submission/${token}`);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/submission/${token}`);
       return response.data;
     } catch (error) {
-      throw new Error(`Error fetching result: ${error.message}`);
+      if (error instanceof Error) {
+        throw new Error(`Error fetching result: ${error.message}`);
+      } else {
+        throw new Error("An unknown error occurred while fetching result.");
+      }
     }
   };
 
-  const pollSubmissionResult = async (token) => {
+  const pollSubmissionResult = async (token: string) => {
     const maxAttempts = 10;
     const interval = 1000;
     let attempts = 0;
@@ -96,7 +112,7 @@ export const CodeWriter = () => {
         return;
       }
 
-      const submitResponse = await axios.post('http://localhost:3000/submission', {
+      const submitResponse = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/submission/`, {
         code: editorValue,
         language_id: languageId,
         input: testCase
@@ -119,8 +135,11 @@ export const CodeWriter = () => {
 
     } catch (error) {
       console.error('Execution error:', error);
-      setStatus(`Error: ${error.message}`);
-      setOutput("");
+      if(error instanceof Error){
+        setStatus(`Error: ${error.message}`);
+        setOutput("");
+      }
+     
     } finally {
       setIsLoading(false);
     }
